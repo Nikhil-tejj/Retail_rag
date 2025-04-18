@@ -82,7 +82,7 @@ def main():
     # Search input
     query = st.text_input(
         "What are you looking for today?",
-        placeholder="e.g., 'waterproof hiking boots' or 'affordable 4K TV with good reviews'"
+        placeholder="e.g., 'moisturizing body wash', 'shampoo for dry hair', 'soap for sensitive skin'" # Updated placeholder
     )
     
     # Search button
