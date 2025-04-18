@@ -1,0 +1,12 @@
+Flask
+sentence-transformers
+pymongo[srv]
+pinecone-client
+python-dotenv
+google-generativeai
+requests
+certifi
+joblib
+scikit-learn
+numpy
+gunicorn
