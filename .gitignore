@@ -1,0 +1,15 @@
+# Environment variables - CRITICAL to ignore
+.env
+
+# Python virtual environment (common names)
+env/
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# OS specific files (optional but harmless)
+.DS_Store
+Thumbs.db

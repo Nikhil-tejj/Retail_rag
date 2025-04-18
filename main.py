@@ -29,8 +29,8 @@ app.json_encoder = JSONEncoder
 
 # Load models
 print("Loading models...")
-knn = joblib.load("models/knn_model.joblib")
-model = SentenceTransformer("models/sentence_transformer")
+knn = joblib.load("./retail_rag/models/knn_model.joblib")
+model = SentenceTransformer("./retail_rag/models/sentence_transformer")
 pc = Pinecone(api_key=os.getenv("Pinecone_API_KEY"))
 pinecone_index = pc.Index("product-search")
 logging.info("Pinecone index connected.")
@@ -87,7 +87,7 @@ def predict(query):
         max_distance = 2.0
         confidence = 1 - (np.mean(distances) / max_distance)
         
-        return category
+        return category,query_embedding
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -142,15 +142,15 @@ def search_products_logic(query):
         raise ConnectionError("One or more services (Model, Pinecone, MongoDB) not initialized.")
 
     # Step 1: Get category from the API
-    category = predict(query)
+    category,query_embedding = predict(query)
     if category.lower() == "other":
         return {
             "status": "not_found",
             "message": "No products available for this query (Category: Other)."
         }
 
-    # Step 2: Convert query to embedding
-    query_embedding = model.encode(query).tolist()
+    # # Step 2: Convert query to embedding
+    query_embedding = query_embedding.tolist()
 
     # Step 3: Retrieve products from Pinecone
     pinecone_results = pinecone_index.query(
