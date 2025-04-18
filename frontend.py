@@ -131,14 +131,21 @@ def main():
     with st.sidebar:
         st.header("About")
         st.markdown("""
-        This search tool uses AI to understand your natural language requests
+        This search tool uses AI(NLP) to understand your natural language requests
         and find the most relevant products from our catalog.
-        
+
+        **Available Categories:**
+        - Bath & Shower
+        - Detergents & Dishwash
+        - Fragrance
+        - Grocery & Gourmet Foods
+        - Hair Care
+        - Skin Care
+
         **Features:**
         - Natural language search
         - Category recognition
-        - AI-powered recommendations
+        - AI-powered 
         """)
-
 if __name__ == "__main__":
     main()
