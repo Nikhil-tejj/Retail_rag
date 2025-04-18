@@ -1,7 +1,7 @@
 Flask
 sentence-transformers
 pymongo[srv]
-pinecone-client
+pinecone
 python-dotenv
 google-generativeai
 requests
