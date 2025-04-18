@@ -9,7 +9,7 @@ from typing import Dict, Any, List
 load_dotenv()
 
 # Configuration
-API_URL = os.getenv("API_URL", "http://localhost:10000/search")
+API_URL = os.getenv("API_URL", "https://nikhil-01-retail-llm.hf.space/search")
 PAGE_TITLE = "Smart Retail Search"
 PAGE_ICON = "🔍"
 
