@@ -29,8 +29,8 @@ app.json_encoder = JSONEncoder
 
 # Load models
 print("Loading models...")
-knn = joblib.load("./retail_rag/models/knn_model.joblib")
-model = SentenceTransformer("./retail_rag/models/sentence_transformer")
+knn = joblib.load("models/knn_model.joblib")
+model = SentenceTransformer("models/sentence_transformer")
 pc = Pinecone(api_key=os.getenv("Pinecone_API_KEY"))
 pinecone_index = pc.Index("product-search")
 logging.info("Pinecone index connected.")
