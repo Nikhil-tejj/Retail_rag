@@ -9,6 +9,8 @@ from pinecone import Pinecone
 from dotenv import load_dotenv
 from bson import ObjectId
 import google.generativeai as genai
+import signal
+import sys
 
 
 # --- Configuration & Initialization ---
@@ -223,7 +225,47 @@ def search():
         logging.error(f"Unexpected error during search for '{query}': {e}", exc_info=True)
         return jsonify({"status": "error", "error": "An internal server error occurred"}), 500
 
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    """Gracefully shutdown the Flask application."""
+    try:
+        # Close MongoDB connection
+        if 'mongo_client' in globals():
+            mongo_client.close()
+            logging.info("MongoDB connection closed.")
+        
+        # Note: Pinecone client doesn't require explicit closing
+        logging.info("Application shutdown initiated.")
+        
+        # Shutdown the Flask development server
+        shutdown_server = request.environ.get('werkzeug.server.shutdown')
+        if shutdown_server is None:
+            return jsonify({"status": "error", "message": "Not running with the Werkzeug Server"}), 500
+        
+        shutdown_server()
+        return jsonify({"status": "success", "message": "Server shutting down..."})
+    
+    except Exception as e:
+        logging.error(f"Error during shutdown: {e}")
+        return jsonify({"status": "error", "message": f"Shutdown failed: {str(e)}"}), 500
+
+def signal_handler(sig, frame):
+    """Handle shutdown signals gracefully."""
+    logging.info(f"Received signal {sig}. Shutting down gracefully...")
+    
+    # Close MongoDB connection
+    if 'mongo_client' in globals():
+        mongo_client.close()
+        logging.info("MongoDB connection closed.")
+    
+    logging.info("Application stopped.")
+    sys.exit(0)
 
 if __name__ == '__main__':
+    # Register signal handlers for graceful shutdown
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
     port = int(os.environ.get('PORT', 10000))  # Match Render's port (10000)
+    logging.info(f"Starting Flask application on port {port}")
     app.run(host='0.0.0.0', port=port)
